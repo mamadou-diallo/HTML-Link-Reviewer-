@@ -52,11 +52,11 @@ public class Main {
                     } catch (MalformedURLException e) {
                         // the URL is not in a valid form
                         System.out.print("Link :  " + test);
-                        System.out.print(RED + " Unknown Error Code" + '\n' + RESET);
+                        System.out.print(RESET + " Unknown Error Code" + '\n' + RESET);
                     } catch (IOException e) {
                         // the connection couldn't be established
                         System.out.print("Link :  " + test);
-                        System.out.print(RED + " Failed to establish connection" + '\n' + RESET);
+                        System.out.print(RESET + " Failed to establish connection" + '\n' + RESET);
                     }
 
                 }
