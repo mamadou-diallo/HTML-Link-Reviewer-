@@ -23,15 +23,99 @@ public class Main {
         //Exit Code variable
         int systemExitCode = 0;
 
-        if(args.length > 0) {
-            //Returns version value
-            if (args[0].matches("v") || args[0].matches("version")){
-                System.out.print("HTML Link Reviewer 0.1");
+
+        if(args.length > 0){
+          //Returns version value
+            if (args[0].matches("--v") || args[0].matches("--version")){
+                    System.out.print("HTML Link Reviewer 0.1");
+            } else if (args[0].matches("--good")) {
+                //Copy argument name
+                String currentDir = System.getProperty("user.dir");
+                String testThis = "\\" + String.valueOf(args[1]);
+                String newDirectory = currentDir + testThis;
+                {
+                    //Open file & read through each line of html found
+                    File input = new File(newDirectory);
+                    Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
+                    Elements links = doc.select("a[href]");
+                    for (Element link : links){
+                        String test = link.attr("href");
+                        try {
+                            URL url = new URL(test);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.connect();
+
+                            int code = conn.getResponseCode();
+                            if(code == 200 )
+                            {
+                                System.out.print("Link :  " + test);
+                                System.out.print(GREEN + " Code 200 - Link is good" + '\n' + RESET );
+                            }
+                        } catch (Exception e) {
+                            // the URL is not in a valid form
+                           // System.out.print(" " + test);
+                          //  System.out.print(RESET + " Unknown Error Code" + '\n' + RESET);
+                        }
+
+                    }
+
+                }
+            }
+                else if(args[0].matches("--bad")) {
+                //Copy argument name
+                String currentDir = System.getProperty("user.dir");
+                String testThis = "\\" + String.valueOf(args[1]);
+                String newDirectory = currentDir + testThis;
+                {
+                    //Open file & read through each line of html found
+                    File input = new File(newDirectory);
+                    Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
+                    Elements links = doc.select("a[href]");
+                    for (Element link : links){
+                        String test = link.attr("href");
+                        try {
+                            URL url = new URL(test);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.connect();
+                            System.out.print("Link :  " + test);
+                            int code = conn.getResponseCode();
+                            if(code == 404){
+                                System.out.print(RED + " Code 404 - Link is bad" + '\n' + RESET);
+                            }else if(code == 400){
+                                System.out.print(RED + " Code 400 - Link is bad" + '\n' + RESET);
+                            }else{
+                                System.out.print(" Unknown Error Code"+ '\n');
+                            }
+
+                        } catch (MalformedURLException e) {
+                            // the URL is not in a valid form
+                            System.out.print("Link :  " + test);
+                            System.out.print(RESET + " Unknown Error Code" + '\n' + RESET);
+                        } catch (IOException e) {
+                            // the connection couldn't be established
+                            System.out.print("Link :  " + test);
+                            System.out.print(RESET + " Failed to establish connection" + '\n' + RESET);
+                        }
+
+                    }
+
+                }
             } else {
-            //Copies & stores argument name
-            String currentDir = System.getProperty("user.dir");
-            String testThis = "\\" + String.valueOf(args[0]);
-            String newDirectory = currentDir + testThis;
+
+             //Copies & stores argument name
+                String testThis;
+                String newDirectory;
+                if(args[0].matches("--all")){
+                    String currentDir = System.getProperty("user.dir");
+                     testThis = "\\" + String.valueOf(args[1]);
+                     newDirectory = currentDir + testThis;
+                } else {
+                    String currentDir = System.getProperty("user.dir");
+                    testThis = "\\" + String.valueOf(args[0]);
+                    newDirectory = currentDir + testThis;
+                }
+
+
             {
                 //Open file & read through each line of html found
                 File input = new File(newDirectory);
