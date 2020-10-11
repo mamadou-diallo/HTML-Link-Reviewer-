@@ -23,6 +23,7 @@ public class Main {
             if (args[0].matches("--v") || args[0].matches("--version")){
                 System.out.print("HTML Link Reviewer 0.1");
             } else if (args[0].matches("--good")){
+            } else if (args[0].matches("--good")) {
                 //Copy argument name
                 String currentDir = System.getProperty("user.dir");
                 String testThis = "\\" + String.valueOf(args[1]);
