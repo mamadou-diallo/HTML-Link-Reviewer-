@@ -81,20 +81,25 @@ public class Main {
                             int code = conn.getResponseCode();
                             if(code == 404){
                                 System.out.print(RED + " Code 404 - Link is bad" + '\n' + RESET);
+                                systemExitCode = 1;
                             }else if(code == 400){
                                 System.out.print(RED + " Code 400 - Link is bad" + '\n' + RESET);
+                                systemExitCode = 1;
                             }else{
                                 System.out.print(" Unknown Error Code"+ '\n');
+                                systemExitCode = 1;
                             }
 
                         } catch (MalformedURLException e) {
                             // the URL is not in a valid form
                             System.out.print("Link :  " + test);
                             System.out.print(RESET + " Unknown Error Code" + '\n' + RESET);
+                            systemExitCode = 1;
                         } catch (IOException e) {
                             // the connection couldn't be established
                             System.out.print("Link :  " + test);
                             System.out.print(RESET + " Failed to establish connection" + '\n' + RESET);
+                            systemExitCode = 2;
                         }
 
                     }
