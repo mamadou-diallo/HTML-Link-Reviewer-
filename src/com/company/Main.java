@@ -17,6 +17,7 @@ public class Main {
     public static final String GREEN = "\033[0;32m";
     public static final String RED = "\033[0;31m";
     public static final String RESET = "\033[0m";
+<<<<<<< Updated upstream
     //Exit Code variable
     public static int systemExitCode = 0;
     public static void main(String[] args) throws IOException{
@@ -24,12 +25,23 @@ public class Main {
 
 
 
+=======
+    //Setting Exit Code variable
+    public static int systemExitCode = 0;
+
+    public static void main(String[] args) throws IOException{
+        String tempFlag;
+>>>>>>> Stashed changes
         if(args.length > 0){
           //Returns version value
             if (args[0].matches("--v") || args[0].matches("--version")){
                     System.out.print("HTML Link Reviewer 0.1");
             } else if (args[0].matches("--good")) {
+<<<<<<< Updated upstream
                 String tempFlag = args[0];
+=======
+                tempFlag = args[0];
+>>>>>>> Stashed changes
 
                 //Copy argument name
                 String currentDir = System.getProperty("user.dir");
@@ -60,7 +72,8 @@ public class Main {
                 }
             }
                 else if(args[0].matches("--bad")) {
-                //Copy argument name
+                    //Copy argument name
+                tempFlag = args[0];
                 String currentDir = System.getProperty("user.dir");
                 String testThis = "\\" + String.valueOf(args[1]);
                 String newDirectory = currentDir + testThis;
@@ -77,16 +90,7 @@ public class Main {
                             conn.connect();
                             System.out.print("Link :  " + test);
                             int code = conn.getResponseCode();
-                            if(code == 404){
-                                System.out.print(RED + " Code 404 - Link is bad" + '\n' + RESET);
-                                systemExitCode = 1;
-                            }else if(code == 400){
-                                System.out.print(RED + " Code 400 - Link is bad" + '\n' + RESET);
-                                systemExitCode = 1;
-                            }else{
-                                System.out.print(" Unknown Error Code"+ '\n');
-                                systemExitCode = 1;
-                            }
+                            returnCode(code,tempFlag, test);
 
                         } catch (MalformedURLException e) {
                             // the URL is not in a valid form
@@ -109,6 +113,7 @@ public class Main {
                 String testThis;
                 String newDirectory;
                 if(args[0].matches("--all")){
+
                     String currentDir = System.getProperty("user.dir");
                      testThis = "\\" + String.valueOf(args[1]);
                      newDirectory = currentDir + testThis;
@@ -120,6 +125,7 @@ public class Main {
 
 
             {
+                tempFlag = args[0];
                 //Open file & read through each line of html found
                 File input = new File(newDirectory);
                 Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
@@ -134,16 +140,7 @@ public class Main {
                         System.out.print("Link :  " + test);
                         int code = conn.getResponseCode();
                        //Reads reponse code & returns appropriate message
-                        if(code == 200 )
-                        {
-                            System.out.print(GREEN + " Code 200 - Link is good" + '\n' + RESET );
-                        }else if(code == 404){
-                            System.out.print(RED + " Code 404 - Link is bad" + '\n' + RESET);
-                        }else if(code == 400){
-                            System.out.print(RED + " Code 400 - Link is bad" + '\n' + RESET);
-                        }else{
-                            System.out.print(" Unknown Error Code"+ '\n');
-                        }
+                        returnCode(code,tempFlag, test);
 
                     } catch (MalformedURLException e) {
                         // the URL is not in a valid form
@@ -167,7 +164,12 @@ public class Main {
     System.exit(systemExitCode);
     }
 
+<<<<<<< Updated upstream
 
+=======
+    //function that reads code, flag & link
+    //Returns expects results from received data
+>>>>>>> Stashed changes
     public static void returnCode(int errorCode, String flagReceived, String receivedLink)
     {
         if(flagReceived.matches("--good"))
