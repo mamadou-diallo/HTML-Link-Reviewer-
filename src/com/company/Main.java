@@ -1,15 +1,22 @@
 package com.company;
 
+import netscape.javascript.JSObject;
+import org.json.simple.parser.JSONParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.json.simple.*;
+import com.google.gson.*;
 
 import java.io.File;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
 
@@ -17,31 +24,21 @@ public class Main {
     public static final String GREEN = "\033[0;32m";
     public static final String RED = "\033[0;31m";
     public static final String RESET = "\033[0m";
-<<<<<<< Updated upstream
+
     //Exit Code variable
-    public static int systemExitCode = 0;
-    public static void main(String[] args) throws IOException{
-
-
-
-
-=======
-    //Setting Exit Code variable
     public static int systemExitCode = 0;
 
     public static void main(String[] args) throws IOException{
         String tempFlag;
->>>>>>> Stashed changes
+
         if(args.length > 0){
           //Returns version value
             if (args[0].matches("--v") || args[0].matches("--version")){
                     System.out.print("HTML Link Reviewer 0.1");
             } else if (args[0].matches("--good")) {
-<<<<<<< Updated upstream
-                String tempFlag = args[0];
-=======
+
                 tempFlag = args[0];
->>>>>>> Stashed changes
+
 
                 //Copy argument name
                 String currentDir = System.getProperty("user.dir");
@@ -70,8 +67,7 @@ public class Main {
                     }
 
                 }
-            }
-                else if(args[0].matches("--bad")) {
+            }else if(args[0].matches("--bad")){
                     //Copy argument name
                 tempFlag = args[0];
                 String currentDir = System.getProperty("user.dir");
@@ -103,6 +99,50 @@ public class Main {
                             System.out.print(RESET + " Failed to establish connection" + '\n' + RESET);
                             systemExitCode = 2;
                         }
+
+                    }
+
+                }
+            }else if(args[0].matches("--telescope")){
+                tempFlag = args[0];
+                //Copy argument name
+                String localHostLink = "http://localhost:3000/posts";
+                {
+                    //Open html and take content of content
+                    Document doc = Jsoup.connect(localHostLink).ignoreContentType(true).get();
+                    String body = doc.body().text();
+
+                    String jSonBody;
+                    String tempString = null;
+
+
+                    //Search for values
+                    Pattern p = Pattern.compile("\"([^\"]*)\"");
+                    Matcher m = p.matcher(body);
+                    while (m.find()) {
+                        int i = 0;
+                        jSonBody = m.group(i++);
+                        tempString = returnString(jSonBody);
+                        tempString = tempString.replaceAll("^\"|\"$", "");
+                        if(tempString.length() == 10)
+                        {
+                            String tempUrl = "http://localhost:3000/posts/" + tempString;
+
+                            try {
+                                URL url = new URL(tempUrl);
+                                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                conn.connect();
+
+                                int code = conn.getResponseCode();
+                                returnCode(code,tempFlag, tempUrl);
+                            } catch (Exception e) {
+                                // the URL is not in a valid form
+                                // System.out.print(" " + test);
+                                //  System.out.print(RESET + " Unknown Error Code" + '\n' + RESET);
+                            }
+
+                        }
+
 
                     }
 
@@ -164,12 +204,10 @@ public class Main {
     System.exit(systemExitCode);
     }
 
-<<<<<<< Updated upstream
 
-=======
     //function that reads code, flag & link
     //Returns expects results from received data
->>>>>>> Stashed changes
+
     public static void returnCode(int errorCode, String flagReceived, String receivedLink)
     {
         if(flagReceived.matches("--good"))
@@ -193,7 +231,26 @@ public class Main {
                 System.out.print(" Unknown Error Code"+ '\n');
                 systemExitCode = 1;
             }
-        }else{
+        }else if(flagReceived.matches("--telescope")){
+            if(errorCode == 200 )
+            {
+                System.out.print("Link :  " + receivedLink);
+                System.out.print(GREEN + " Code 200 - Link is good" + '\n' + RESET );
+            }else if(errorCode == 404){
+                System.out.print("Link :  " + receivedLink);
+                System.out.print(RED + " Code 404 - Link is bad" + '\n' + RESET);
+                systemExitCode = 1;
+            }else if(errorCode == 400){
+                System.out.print("Link :  " + receivedLink);
+                System.out.print(RED + " Code 400 - Link is bad" + '\n' + RESET);
+                systemExitCode = 1;
+            }else{
+                System.out.print("Link :  " + receivedLink);
+                System.out.print(" Unknown Error Code"+ '\n');
+                systemExitCode = 1;
+            }
+        }
+        else{
             if(errorCode == 200 )
             {
                 System.out.print("Link :  " + receivedLink);
@@ -208,5 +265,10 @@ public class Main {
                 System.out.print(" Unknown Error Code"+ '\n');
             }
         }
+    }
+
+    public static String returnString(String stringReceived)
+    {
+        return stringReceived;
     }
 }
