@@ -28,13 +28,13 @@ public class Main {
     //Exit Code variable
     public static int systemExitCode = 0;
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         String tempFlag;
 
-        if(args.length > 0){
-          //Returns version value
-            if (args[0].matches("--v") || args[0].matches("--version")){
-                    System.out.print("HTML Link Reviewer 0.1");
+        if (args.length > 0) {
+            //Returns version value
+            if (args[0].matches("--v") || args[0].matches("--version")) {
+                System.out.print("HTML Link Reviewer 0.1");
             } else if (args[0].matches("--good")) {
 
                 tempFlag = args[0];
@@ -49,7 +49,7 @@ public class Main {
                     File input = new File(newDirectory);
                     Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
                     Elements links = doc.select("a[href]");
-                    for (Element link : links){
+                    for (Element link : links) {
                         String test = link.attr("href");
                         try {
                             URL url = new URL(test);
@@ -57,18 +57,18 @@ public class Main {
                             conn.connect();
 
                             int code = conn.getResponseCode();
-                            returnCode(code,tempFlag, test);
+                            returnCode(code, tempFlag, test);
                         } catch (Exception e) {
                             // the URL is not in a valid form
-                           // System.out.print(" " + test);
-                          //  System.out.print(RESET + " Unknown Error Code" + '\n' + RESET);
+                            // System.out.print(" " + test);
+                            //  System.out.print(RESET + " Unknown Error Code" + '\n' + RESET);
                         }
 
                     }
 
                 }
-            }else if(args[0].matches("--bad")){
-                    //Copy argument name
+            } else if (args[0].matches("--bad")) {
+                //Copy argument name
                 tempFlag = args[0];
                 String currentDir = System.getProperty("user.dir");
                 String testThis = "\\" + String.valueOf(args[1]);
@@ -78,7 +78,7 @@ public class Main {
                     File input = new File(newDirectory);
                     Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
                     Elements links = doc.select("a[href]");
-                    for (Element link : links){
+                    for (Element link : links) {
                         String test = link.attr("href");
                         try {
                             URL url = new URL(test);
@@ -86,7 +86,7 @@ public class Main {
                             conn.connect();
                             System.out.print("Link :  " + test);
                             int code = conn.getResponseCode();
-                            returnCode(code,tempFlag, test);
+                            returnCode(code, tempFlag, test);
 
                         } catch (MalformedURLException e) {
                             // the URL is not in a valid form
@@ -103,7 +103,7 @@ public class Main {
                     }
 
                 }
-            }else if(args[0].matches("--telescope")){
+            } else if (args[0].matches("--telescope")) {
                 tempFlag = args[0];
                 //Copy argument name
                 String localHostLink = "http://localhost:3000/posts";
@@ -124,8 +124,7 @@ public class Main {
                         jSonBody = m.group(i++);
                         tempString = returnString(jSonBody);
                         tempString = tempString.replaceAll("^\"|\"$", "");
-                        if(tempString.length() == 10)
-                        {
+                        if (tempString.length() == 10) {
                             String tempUrl = "http://localhost:3000/posts/" + tempString;
 
                             try {
@@ -134,7 +133,7 @@ public class Main {
                                 conn.connect();
 
                                 int code = conn.getResponseCode();
-                                returnCode(code,tempFlag, tempUrl);
+                                returnCode(code, tempFlag, tempUrl);
                             } catch (Exception e) {
                                 // the URL is not in a valid form
                                 // System.out.print(" " + test);
@@ -148,15 +147,13 @@ public class Main {
 
                 }
             } else {
-
-             //Copies & stores argument name
+                //Copies & stores argument name
                 String testThis;
                 String newDirectory;
-                if(args[0].matches("--all")){
-
+                if (args[0].matches("--all")) {
                     String currentDir = System.getProperty("user.dir");
-                     testThis = "\\" + String.valueOf(args[1]);
-                     newDirectory = currentDir + testThis;
+                    testThis = "\\" + String.valueOf(args[1]);
+                    newDirectory = currentDir + testThis;
                 } else {
                     String currentDir = System.getProperty("user.dir");
                     testThis = "\\" + String.valueOf(args[0]);
@@ -164,111 +161,104 @@ public class Main {
                 }
 
 
-            {
-                tempFlag = args[0];
-                //Open file & read through each line of html found
-                File input = new File(newDirectory);
-                Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
-                Elements links = doc.select("a[href]");
-                //Loops through elements & tests connections
-                for (Element link : links){
-                    String test = link.attr("href");
-                    try {
-                        URL url = new URL(test);
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        conn.connect();
-                        System.out.print("Link :  " + test);
-                        int code = conn.getResponseCode();
-                       //Reads reponse code & returns appropriate message
-                        returnCode(code,tempFlag, test);
+                {
+                    tempFlag = args[0];
+                    //Open file & read through each line of html found
+                    File input = new File(newDirectory);
+                    Document doc = Jsoup.parse(input, "UTF-8", "http://example.com/");
+                    Elements links = doc.select("a[href]");
+                    //Loops through elements & tests connections
+                    for (Element link : links) {
+                        String test = link.attr("href");
+                        try {
+                            URL url = new URL(test);
+                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                            conn.connect();
+                            System.out.print("Link :  " + test);
+                            int code = conn.getResponseCode();
+                            //Reads reponse code & returns appropriate message
+                            returnCode(code, tempFlag, test);
 
-                    } catch (MalformedURLException e) {
-                        // the URL is not in a valid form
-                        System.out.print("Link :  " + test);
-                        System.out.print(RESET + " Unknown Error Code" + '\n' + RESET);
-                        systemExitCode = 1;
-                    } catch (IOException e) {
-                        // the connection couldn't be established
-                        System.out.print("Link :  " + test);
-                        System.out.print(RESET + " Failed to establish connection" + '\n' + RESET);
-                        systemExitCode = 2;
+                        } catch (MalformedURLException e) {
+                            // the URL is not in a valid form
+                            System.out.print("Link :  " + test);
+                            System.out.print(RESET + " Unknown Error Code" + '\n' + RESET);
+                            systemExitCode = 1;
+                        } catch (IOException e) {
+                            // the connection couldn't be established
+                            System.out.print("Link :  " + test);
+                            System.out.print(RESET + " Failed to establish connection" + '\n' + RESET);
+                            systemExitCode = 2;
+                        }
                     }
                 }
             }
-        }
-        }else{
+        } else {
             System.out.print("To start using this tool please enter the title of a document as a command line argument");
             systemExitCode = 3;
         }
 
-    System.exit(systemExitCode);
+        System.exit(systemExitCode);
     }
 
 
     //function that reads code, flag & link
     //Returns expects results from received data
 
-    public static void returnCode(int errorCode, String flagReceived, String receivedLink)
-    {
-        if(flagReceived.matches("--good"))
-        {
-            if(errorCode == 200 )
-            {
+    public static void returnCode(int errorCode, String flagReceived, String receivedLink) {
+        if (flagReceived.matches("--good")) {
+            if (errorCode == 200) {
                 System.out.print("Link :  " + receivedLink);
-                System.out.print(GREEN + " Code 200 - Link is good" + '\n' + RESET );
+                System.out.print(GREEN + " Code 200 - Link is good" + '\n' + RESET);
             }
-        }else if(flagReceived.matches("--bad")){
-            if(errorCode == 404){
+        } else if (flagReceived.matches("--bad")) {
+            if (errorCode == 404) {
                 System.out.print("Link :  " + receivedLink);
                 System.out.print(RED + " Code 404 - Link is bad" + '\n' + RESET);
                 systemExitCode = 1;
-            }else if(errorCode == 400){
+            } else if (errorCode == 400) {
                 System.out.print("Link :  " + receivedLink);
                 System.out.print(RED + " Code 400 - Link is bad" + '\n' + RESET);
                 systemExitCode = 1;
-            }else{
+            } else {
                 System.out.print("Link :  " + receivedLink);
-                System.out.print(" Unknown Error Code"+ '\n');
+                System.out.print(" Unknown Error Code" + '\n');
                 systemExitCode = 1;
             }
-        }else if(flagReceived.matches("--telescope")){
-            if(errorCode == 200 )
-            {
+        } else if (flagReceived.matches("--telescope")) {
+            if (errorCode == 200) {
                 System.out.print("Link :  " + receivedLink);
-                System.out.print(GREEN + " Code 200 - Link is good" + '\n' + RESET );
-            }else if(errorCode == 404){
+                System.out.print(GREEN + " Code 200 - Link is good" + '\n' + RESET);
+            } else if (errorCode == 404) {
                 System.out.print("Link :  " + receivedLink);
                 System.out.print(RED + " Code 404 - Link is bad" + '\n' + RESET);
                 systemExitCode = 1;
-            }else if(errorCode == 400){
+            } else if (errorCode == 400) {
                 System.out.print("Link :  " + receivedLink);
                 System.out.print(RED + " Code 400 - Link is bad" + '\n' + RESET);
                 systemExitCode = 1;
-            }else{
+            } else {
                 System.out.print("Link :  " + receivedLink);
-                System.out.print(" Unknown Error Code"+ '\n');
+                System.out.print(" Unknown Error Code" + '\n');
                 systemExitCode = 1;
             }
-        }
-        else{
-            if(errorCode == 200 )
-            {
+        } else {
+            if (errorCode == 200) {
                 System.out.print("Link :  " + receivedLink);
-                System.out.print(GREEN + " Code 200 - Link is good" + '\n' + RESET );
-            }else if(errorCode == 404){
+                System.out.print(GREEN + " Code 200 - Link is good" + '\n' + RESET);
+            } else if (errorCode == 404) {
                 System.out.print("Link :  " + receivedLink);
                 System.out.print(RED + " Code 404 - Link is bad" + '\n' + RESET);
-            }else if(errorCode == 400){
+            } else if (errorCode == 400) {
                 System.out.print("Link :  " + receivedLink);
                 System.out.print(RED + " Code 400 - Link is bad" + '\n' + RESET);
-            }else{
-                System.out.print(" Unknown Error Code"+ '\n');
+            } else {
+                System.out.print(" Unknown Error Code" + '\n');
             }
         }
     }
 
-    public static String returnString(String stringReceived)
-    {
+    public static String returnString(String stringReceived) {
         return stringReceived;
     }
 }
