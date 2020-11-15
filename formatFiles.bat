@@ -1,0 +1,1 @@
+java -jar ./google-java-format-1.9-all-deps.jar ".\HTML-Link-Reviewer-\src\com\company\Main.java"
