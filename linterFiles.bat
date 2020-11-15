@@ -1,1 +1,0 @@
-java -jar ./spotbugs-4.1.4 ".\HTML-Link-Reviewer-\src\com\company\Main.java"
