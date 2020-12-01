@@ -54,9 +54,11 @@ public class MainTest {
     assertEquals(400,code);
   }
 
+
+
   @Test
   public void testReturnString() {
     String testReceived = returnString(goodUrl);
-    assertEquals("www.google.com", testReceived);
+    assertEquals(goodUrl, testReceived);
   }
 }
