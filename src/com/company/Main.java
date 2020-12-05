@@ -1,13 +1,11 @@
 package com.company;
 
-import netscape.javascript.JSObject;
-import org.json.simple.parser.JSONParser;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.json.simple.*;
-import com.google.gson.*;
+
 
 import java.io.File;
 
